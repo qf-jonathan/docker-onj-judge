@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.5
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-password-1772634162
+
+  redis:
+    image: redis:4-alpine
+    command: redis-server --appendonly yes
+
+  onj:
+    build: .
+    command: /bin/sh setup
+    ports:
+      - 8000:80
+    depends_on:
+      - db
+      - redis

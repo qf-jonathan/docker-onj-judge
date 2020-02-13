@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.5
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-password-1772634162
+
+  redis:
+    image: redis:4-alpine
+    command: redis-server --appendonly yes
+
+  onj:
+    image: diedrik/onj:latest
+    command: /bin/sh setup
+    ports:
+      - published: 8000
+        target: 80
+    depends_on:
+      - db
+      - redis
+    deploy:
+      mode: replicated
+      replicas: 1
+      endpoint_mode: vip
